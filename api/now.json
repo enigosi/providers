@@ -1,0 +1,7 @@
+{
+    "version": 1,
+    "alias": "codingchalangeapi",
+    "env": {
+        "DATABASE_URL": "@database-url"
+      }
+  }
