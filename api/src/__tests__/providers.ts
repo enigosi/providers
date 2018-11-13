@@ -39,6 +39,25 @@ test('should return list of patients', async () => {
   expect(response.body.length).toBe(20);
 });
 
+test('should correctly parse dollar values', async () => {
+  await knex('patients').insert([
+    {
+      ...EXAMPLE_RECORD,
+      ['Average Covered Charges Cents']: 123,
+      ['Average Total Payments Cents']: 100000,
+      ['Average Medicare Payments Cents']: 100
+    }
+  ]);
+
+  const response = await request(app).get('/providers');
+
+  expect(response.statusCode).toBe(200);
+
+  expect(response.body[0]['Average Covered Charges']).toBe('$1.23');
+  expect(response.body[0]['Average Total Payments']).toBe('$1000.00');
+  expect(response.body[0]['Average Medicare Payments']).toBe('$1.00');
+});
+
 test('should filter results by discharges', async () => {
   await knex('patients').insert(testData);
 
@@ -88,7 +107,7 @@ test('should filter results by state', async () => {
   expect(response.body.length).toBe(3);
 });
 
-test.only('should correctly paginate results', async () => {
+test('should correctly paginate results', async () => {
   await knex('patients').insert(testData);
 
   const firstPageResponse = await request(app).get(
