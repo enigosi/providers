@@ -9,7 +9,10 @@
     "build": "tsc",
     "now-build": ":",
     "now-start": "node ./src/index.js",
-    "deploy": "tsc && cp package.json dist/ && now --public ./dist -A ../now.json && now alias"
+    "deploy": "tsc && cp package.json dist/ && now --public ./dist -A ../now.json && now alias",
+    "migrate-make": "knex migrate:make",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback"
   },
   "keywords": [],
   "author": "",
