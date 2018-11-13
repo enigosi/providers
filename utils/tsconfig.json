@@ -7,7 +7,7 @@
             "esnext.asynciterable"
         ],
         "types": [
-            "node"
+            "node", "jest"
         ]
     },
     "exclude": [

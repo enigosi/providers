@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "hydrate": "ts-node ./src/hydrate/"
+    "hydrate": "ts-node ./src/hydrate/",
+    "test": "jest --runInBand"
   },
   "author": "",
   "license": "ISC",
@@ -15,8 +15,11 @@
     "pg": "^7.6.1"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.9",
     "@types/node": "^10.12.6",
+    "jest": "^23.6.0",
     "prettier": "^1.15.2",
+    "ts-jest": "^23.10.4",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.0",

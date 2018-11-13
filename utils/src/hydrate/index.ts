@@ -1,2 +1,3 @@
+import hydrate from './hydrate';
 
-console.log('Hello')
+hydrate('./data.csv');
