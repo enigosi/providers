@@ -24,6 +24,7 @@ export enum ResultHeaders {
 }
 
 export enum DbFields {
+  ID = 'Id',
   PROVIDER_NAME = 'Provider Name',
   PROVIDER_STREET_ADDRESS = 'Provider Street Address',
   PROVIDER_CITY = 'Provider City',

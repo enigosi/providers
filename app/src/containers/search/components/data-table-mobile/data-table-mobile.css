@@ -1,0 +1,15 @@
+.provider-data {
+    margin-bottom: 20px
+}
+
+.provider-data__row {
+    padding: 10px 0;
+}
+
+.provider-data__label {
+   text-align: right
+}
+
+.provider-data__value {
+    padding-left: 20px;
+ }
