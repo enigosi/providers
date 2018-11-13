@@ -10,9 +10,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fast-csv": "^2.4.1",
     "knex": "^0.15.2",
     "lodash": "^4.17.11",
-    "pg": "^7.6.1"
+    "pg": "^7.6.1",
+    "pg-copy-streams": "^1.2.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",
