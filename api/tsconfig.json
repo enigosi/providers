@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "outDir": "dist",
+      "baseUrl": ".",
+      "strict": false,
+      "sourceMap": true,
+      "lib": [
+        "es2017",
+        "esnext.asynciterable"
+      ]
+    }, 
+    "exclude": [ "node_modules"]
+  }

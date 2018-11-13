@@ -1,0 +1,21 @@
+{
+    "enable": true,
+    "defaultSeverity": "error",
+    "jsRules": {},
+    "rules": {
+      "no-this-assignment": { "severity": "off" },
+      "import-name": { "severity": "off" },
+      "prettier": [true, { "singleQuote": true }],
+      "object-literal-sort-keys": false,
+      "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+      "no-submodule-imports": [true, "styled-components/native", "lodash/fp", "date-fns/fp"],
+      "variable-name": [false],
+      "semicolon": [true, "always", "ignore-bound-class-methods"]
+    },
+    "autoFixOnSave": true,
+    "rulesDirectory": ["tslint-plugin-prettier"],
+    "extends": ["tslint-config-airbnb", "tslint-config-prettier"],
+    "tslint.enable": true,
+    "tslint.autoFixOnSave ": true
+  }
+  
