@@ -44,15 +44,7 @@ class Search extends React.Component<IProps> {
       handleChangePage,
       currentPage
     } = this.props;
-    console.log({
-      providersFetch,
-      handleUpdateRangeFilter,
-      handleUpdateStateFilter,
-      dischargesFilter,
-      avarageCoveredChargesFilter,
-      avarageMedicareChargesFilter,
-      stateFilter
-    });
+
     // get total number of items for current query
     const headers = get('meta.response.headers', providersFetch);
     const totalItms = headers && headers.get('x-total-count');
@@ -72,9 +64,15 @@ class Search extends React.Component<IProps> {
           </Col>
           <Col sm={16} lg={18} x-lg={19} style={{ padding: 15 }}>
             <Layout.Content>
-              {providersFetch.pending && <Spin tip="Loading..." size="large" />}
+              {providersFetch.pending && (
+                <div className="spin-wrapper">
+                  <Spin tip="Loading..." size="large" />
+                </div>
+              )}
               {providersFetch.rejected && (
-                <Tag color="red">{providersFetch.reason}</Tag>
+                <Tag color="red">
+                  Error! {get('reason.message', providersFetch) || ''}
+                </Tag>
               )}
               {providersFetch.fulfilled && (
                 <DataTable
@@ -92,6 +90,9 @@ class Search extends React.Component<IProps> {
   }
 }
 
+/**
+ * Decorate component with react-refetch connect. Will refetch data on each url update
+ */
 export default connect((props: IProps) => ({
   providersFetch: `https://codingchalangeapi.now.sh/providers${buildQueryParametersFromFilters(
     props

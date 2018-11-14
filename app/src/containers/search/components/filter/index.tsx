@@ -39,11 +39,9 @@ export default class IntegerStep extends React.Component<IProps> {
         <Slider
           range
           defaultValue={[1, DISCHARGES_MAX]}
-          onChange={(value: IRangeFilterValue) => {
-            console.log('AAAAAAAAAAAAAA');
-
-            handleUpdateRangeFilter('dischargesFilter', value);
-          }}
+          onChange={(value: IRangeFilterValue) =>
+            handleUpdateRangeFilter('dischargesFilter', value)
+          }
           min={1}
           max={DISCHARGES_MAX}
         />

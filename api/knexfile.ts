@@ -11,7 +11,8 @@ const settings = {
   },
   development: {
     client: 'postgresql',
-    connection: ENV_VARS.DATABASE_URL,
+    connection:
+      ENV_VARS.DATABASE_URL || 'postgresql://localhost/codingchallange',
     pool: {
       min: 2,
       max: 10
@@ -19,7 +20,8 @@ const settings = {
   },
   test: {
     client: 'postgresql',
-    connection: ENV_VARS.DATABASE_URL,
+    connection:
+      ENV_VARS.DATABASE_URL || 'postgresql://localhost/codingchallangetest',
     pool: {
       min: 2,
       max: 10

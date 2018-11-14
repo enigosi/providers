@@ -7,6 +7,7 @@ import {
   AVARAGE_COVERED_CHARGES_MAX,
   AVARAGE_MEDICARE_CHARGES_MAX
 } from './consts';
+import './style.css';
 
 interface IState
   extends Pick<
@@ -38,17 +39,17 @@ export default class SearchContainer extends React.Component<{}, IState> {
     200,
     (key: keyof IState, value: IRangeFilterValue) => (
       prevState: IState
-    ): IState => {
-      console.log('CCCCC');
-      return {
-        ...prevState,
-        [key]: value,
-        // go back to first page when query parameters change
-        currentPage: 1
-      };
-    }
+    ): IState => ({
+      ...prevState,
+      [key]: value,
+      // go back to first page when query parameters change
+      currentPage: 1
+    })
   );
 
+  /**
+   * Handler for Ant Design range slider
+   */
   handleUpdateRangeFilter = (
     filterName: IRangeFilters,
     value: IRangeFilterValue
@@ -61,6 +62,9 @@ export default class SearchContainer extends React.Component<{}, IState> {
       currentPage: 1
     });
 
+  /**
+   * Handler fot changing pagination state
+   */
   handleChangePage = (page: number) =>
     this.setState({
       currentPage: page
