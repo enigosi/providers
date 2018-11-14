@@ -12,6 +12,7 @@ import {
 } from './types';
 import DataTable from './components/data-table';
 import buildQueryParametersFromFilters from './build-query-parameters';
+import ENV_VARS from '../../env-vars';
 
 export interface IProps
   extends Pick<
@@ -94,7 +95,7 @@ class Search extends React.Component<IProps> {
  * Decorate component with react-refetch connect. Will refetch data on each url update
  */
 export default connect((props: IProps) => ({
-  providersFetch: `https://codingchalangeapi.now.sh/providers${buildQueryParametersFromFilters(
-    props
-  )}`
+  providersFetch: `${
+    ENV_VARS.API_URL
+  }/providers${buildQueryParametersFromFilters(props)}`
 }))(Search);

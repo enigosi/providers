@@ -16,7 +16,7 @@
     "build": "react-app-rewired build --scripts-version react-scripts-ts",
     "test": "react-app-rewired test --env=jsdom --scripts-version react-scripts-ts",
     "eject": "react-scripts-ts eject",
-    "deploy": "yarn build && now --public ./build -A ../now.json && now alias"
+    "deploy": "yarn build && now --public ./build -A ../now.json && cp now.json build/ && cd ./build && now alias"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

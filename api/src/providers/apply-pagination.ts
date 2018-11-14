@@ -2,7 +2,7 @@ import { QueryBuilder } from 'knex';
 import { QueryParameters } from './types';
 
 const DEFAULT_PAGINATION_PAGE = 1;
-const DEFAULT_PAGINATION_PER_PAGE = 20;
+const DEFAULT_PAGINATION_PER_PAGE = 50;
 
 const applyPaginationToQuery = (
   queryBuilder: QueryBuilder,
