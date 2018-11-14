@@ -8,6 +8,7 @@ export interface QueryParameters {
   state?: string;
   page?: string;
   per_page?: string;
+  field?: string[];
 }
 
 export enum ResultHeaders {

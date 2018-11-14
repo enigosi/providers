@@ -1,4 +1,5 @@
 import * as request from 'supertest';
+import { keys } from 'lodash/fp';
 import app from '../app';
 import knex from '../../../api/src/db';
 
@@ -129,4 +130,30 @@ test('should correctly paginate results', async () => {
   expect(secondPageResponse.body.length).toBe(4);
   expect(secondPageResponse.body[0]['Total Discharges']).toBe(4);
   expect(secondPageResponse.body[3]['Total Discharges']).toBe(7);
+});
+
+test('when field[] parameters passed should return only selected fields', async () => {
+  await knex('patients').insert(testData);
+
+  const response = await request(app).get(
+    '/providers?field[]=provider_name&field[]=total_discharges'
+  );
+
+  expect(response.statusCode).toBe(200);
+  expect(keys(response.body[0]).length).toBe(2);
+  expect(keys(response.body[0])).toEqual(
+    expect.arrayContaining(['Provider Name', 'Total Discharges'])
+  );
+});
+
+test('should ignore all invalid field[] parameters', async () => {
+  await knex('patients').insert(testData);
+
+  const response = await request(app).get(
+    '/providers?field[]=provider_name&field[]=TEST&field[]=DROP%20DATABASE'
+  );
+
+  expect(response.statusCode).toBe(200);
+  expect(keys(response.body[0]).length).toBe(1);
+  expect(keys(response.body[0])).toEqual(['Provider Name']);
 });

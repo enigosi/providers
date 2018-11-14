@@ -16,23 +16,28 @@ const centsToDollarString: CentsToDollarStringFunction = flow([
 /**
  * Parse each row of data selected from the db to format expected to be returned from the endpoit
  */
-
 const parseRow = (
   row: { [K in DbFields]: string | number }
-): { [K in ResultHeaders]: string } => {
+): { [K in ResultHeaders]?: string } => {
   // convert dollar values to cent integers
-  const rowWithParsedDollars = {
-    ...row,
-    'Average Covered Charges': centsToDollarString(row[
+  const rowWithParsedDollars = { ...row };
+
+  // conver cent values to dollar strings if were selected
+  if (row['Average Covered Charges Cents']) {
+    rowWithParsedDollars['Average Covered Charges'] = centsToDollarString(row[
       'Average Covered Charges Cents'
-    ] as number),
-    'Average Total Payments': centsToDollarString(row[
+    ] as number);
+  }
+  if (row['Average Total Payments Cents']) {
+    rowWithParsedDollars['Average Total Payments'] = centsToDollarString(row[
       'Average Total Payments Cents'
-    ] as number),
-    'Average Medicare Payments': centsToDollarString(row[
+    ] as number);
+  }
+  if (row['Average Medicare Payments Cents']) {
+    rowWithParsedDollars['Average Medicare Payments'] = centsToDollarString(row[
       'Average Medicare Payments Cents'
-    ] as number)
-  };
+    ] as number);
+  }
 
   // pick fields that are going to be stored database (and discard all others)
   const rowWithSelectedColumns = pick(
