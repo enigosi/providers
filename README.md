@@ -36,7 +36,7 @@ yarn start
 
 Database `codingchallangetest` is a default when running tests
 
-### Set up
+### API
 
 Endpoint: https://codingchalangeapi.now.sh/providers
 
