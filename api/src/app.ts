@@ -6,7 +6,11 @@ import providersHandler from './providers/';
 const app = express();
 
 // enable CORS
-app.use(cors());
+app.use(
+  cors({
+    exposedHeaders: ['x-total-count']
+  })
+);
 
 app.get('/providers', providersHandler);
 

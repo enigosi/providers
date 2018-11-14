@@ -37,6 +37,7 @@ test('should return list of patients', async () => {
 
   expect(response.statusCode).toBe(200);
   expect(response.body.length).toBe(20);
+  expect(response.body[0]['Id']).toBeTruthy();
 });
 
 test('should correctly parse dollar values', async () => {

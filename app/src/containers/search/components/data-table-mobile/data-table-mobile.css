@@ -2,14 +2,14 @@
     margin-bottom: 20px
 }
 
-.provider-data__row {
-    padding: 10px 0;
-}
-
 .provider-data__label {
-   text-align: right
+   text-align: right;
+   width: 190px;
+   padding: 5px 0;
+   vertical-align: top;
 }
 
 .provider-data__value {
-    padding-left: 20px;
+    padding: 5px 0 5px 20px;
+    vertical-align: top;
  }

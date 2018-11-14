@@ -1,57 +1,17 @@
 import * as React from 'react';
-import { Table } from 'antd';
+import { Table, Pagination } from 'antd';
 import { debounce } from 'lodash/fp';
-import { ColumnProps } from 'antd/lib/table';
 import { IProvider } from '../../types';
 import DataTableMobile from '../data-table-mobile';
-
-export const COLUMNS: ColumnProps<IProvider>[] = [
-  {
-    dataIndex: 'Provider Name',
-    title: 'Provider Name'
-  },
-  {
-    dataIndex: 'Provider Street Address',
-    title: 'Provider Street Address'
-  },
-  {
-    dataIndex: 'Provider City',
-    title: 'Provider City'
-  },
-  {
-    dataIndex: 'Provider State',
-    title: 'Provider State'
-  },
-  {
-    dataIndex: 'Provider Zip Code',
-    title: 'Provider Zip Code'
-  },
-  {
-    dataIndex: 'Hospital Referral Region Description',
-    title: 'Hospital Referral Region Description'
-  },
-  {
-    dataIndex: 'Total Discharges',
-    title: 'Total Discharges'
-  },
-  {
-    dataIndex: 'Average Covered Charges',
-    title: 'Average Covered Charges'
-  },
-  {
-    dataIndex: 'Average Total Payments',
-    title: 'Average Total Payments'
-  },
-  {
-    dataIndex: 'Average Medicare Payments',
-    title: 'Average Medicare Payments'
-  }
-];
+import { COLUMNS, RESULTS_PER_PAGE } from '../../consts';
 
 const LARGE_ENOUGH_FOR_TABLE_SCREEN_SIZE = 1400;
 
 interface IProps {
   providers: IProvider[];
+  totalItms?: number;
+  handleChangePage: (page: number) => void;
+  currentPage: number;
 }
 interface IState {
   isLargeEnoughForTable: boolean;
@@ -79,19 +39,28 @@ export default class DataTable extends React.Component<IProps> {
   }
 
   render() {
-    const { providers } = this.props;
+    const { providers, totalItms, handleChangePage, currentPage } = this.props;
     const { isLargeEnoughForTable } = this.state;
-
-    if (isLargeEnoughForTable) {
-      return (
-        <Table
-          size="small"
-          dataSource={providers}
-          columns={COLUMNS}
-          rowKey="Id"
+    return (
+      <div>
+        {isLargeEnoughForTable ? (
+          <Table
+            size="small"
+            dataSource={providers}
+            columns={COLUMNS}
+            rowKey="Id"
+            pagination={false}
+          />
+        ) : (
+          <DataTableMobile providers={providers} />
+        )}
+        <Pagination
+          current={currentPage}
+          total={totalItms || 0}
+          onChange={handleChangePage}
+          pageSize={RESULTS_PER_PAGE}
         />
-      );
-    }
-    return <DataTableMobile providers={providers} />;
+      </div>
+    );
   }
 }

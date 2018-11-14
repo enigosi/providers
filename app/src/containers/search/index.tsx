@@ -1,12 +1,12 @@
 import * as React from 'react';
-// import Loader from '../../components/loader';
+import { debounce } from 'lodash/fp';
 import Search from './search';
-import axios from 'axios';
-import { IFilters, IProvider } from './types';
-
-const DISCHARGES_MAX = 1000;
-const AVARAGE_COVERED_CHARGES_MAX = 1000;
-const AVARAGE_MEDICARE_CHARGES_MAX = 1000;
+import { IFilters, IProvider, IRangeFilterValue, IRangeFilters } from './types';
+import {
+  DISCHARGES_MAX,
+  AVARAGE_COVERED_CHARGES_MAX,
+  AVARAGE_MEDICARE_CHARGES_MAX
+} from './consts';
 
 interface IState
   extends Pick<
@@ -18,14 +18,8 @@ interface IState
   > {
   providers: IProvider[];
   errorStatus?: string;
+  currentPage: number;
 }
-
-type RangeFilterValue = [number, number];
-
-type RangeFilters =
-  | 'avarageCoveredChargesFilter'
-  | 'avarageCoveredChargesFilter'
-  | 'avarageMedicareChargesFilter';
 
 export default class SearchContainer extends React.Component<{}, IState> {
   state: IState = {
@@ -33,63 +27,64 @@ export default class SearchContainer extends React.Component<{}, IState> {
     dischargesFilter: [1, DISCHARGES_MAX],
     avarageCoveredChargesFilter: [1, AVARAGE_COVERED_CHARGES_MAX],
     avarageMedicareChargesFilter: [1, AVARAGE_MEDICARE_CHARGES_MAX],
-    stateFilter: ''
+    stateFilter: '',
+    currentPage: 1
   };
 
   /**
    * Helper for typescript
    */
-  updateFilterTypeHelper = (key: keyof IState, value: RangeFilterValue) => (
-    prevState: IState
-  ): IState => ({
-    ...prevState,
-    [key]: value
-  });
+  updateFilterTypeHelper = debounce(
+    200,
+    (key: keyof IState, value: IRangeFilterValue) => (
+      prevState: IState
+    ): IState => {
+      console.log('CCCCC');
+      return {
+        ...prevState,
+        [key]: value,
+        // go back to first page when query parameters change
+        currentPage: 1
+      };
+    }
+  );
 
   handleUpdateRangeFilter = (
-    filterName: RangeFilters,
-    value: RangeFilterValue
-  ) => this.updateFilterTypeHelper(filterName, value);
+    filterName: IRangeFilters,
+    value: IRangeFilterValue
+  ) => this.setState(this.updateFilterTypeHelper(filterName, value));
 
   handleUpdateStateFilter = (value: string) =>
-    this.setState({ stateFilter: value });
+    this.setState({
+      stateFilter: value,
+      // go back to first page when query parameters change
+      currentPage: 1
+    });
 
-  async componentDidMount() {
-    try {
-      const response = await axios.get(
-        'https://codingchalangeapi.now.sh/providers'
-      );
-
-      if (response.status >= 400) {
-        this.setState({ errorStatus: 'Error fetching groceries' });
-      } else {
-        // response.then(data => {
-        //   console.log('data', data);
-
-        this.setState({ providers: response.data });
-        // });
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
+  handleChangePage = (page: number) =>
+    this.setState({
+      currentPage: page
+    });
 
   public render() {
     const {
-      providers,
       dischargesFilter,
       avarageCoveredChargesFilter,
       avarageMedicareChargesFilter,
-      stateFilter
+      stateFilter,
+      currentPage
     } = this.state;
 
     return (
       <Search
-        providers={providers}
         dischargesFilter={dischargesFilter}
         avarageCoveredChargesFilter={avarageCoveredChargesFilter}
         avarageMedicareChargesFilter={avarageMedicareChargesFilter}
         stateFilter={stateFilter}
+        handleUpdateRangeFilter={this.handleUpdateRangeFilter}
+        handleUpdateStateFilter={this.handleUpdateStateFilter}
+        handleChangePage={this.handleChangePage}
+        currentPage={currentPage}
       />
     );
   }

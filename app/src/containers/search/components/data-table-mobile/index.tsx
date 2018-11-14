@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IProvider } from '../../types';
-import { COLUMNS } from '../data-table';
+import { COLUMNS } from '../../consts';
 import './data-table-mobile.css';
 
 interface IProps {
