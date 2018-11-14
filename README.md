@@ -1,6 +1,6 @@
 **API** - https://codingchalangeapi.now.sh
 **APP** - https://codingchalangeapp.now.sh
-(When not used for a while it might take for them fews more seconds to boot)
+(When not used for a while it may take a few additional seconds to boot)
 
 ## Project
 Project is writeen in typescript and split into three main directories
