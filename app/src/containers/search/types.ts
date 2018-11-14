@@ -4,6 +4,9 @@ export interface IFilters {
   avarageMedicareChargesFilter: [number, number];
   stateFilter: string;
   currentPage: number;
+  fieldsSelection: {
+    [fieldName: string]: boolean;
+  };
 }
 
 export interface IProvider {

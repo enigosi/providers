@@ -1,4 +1,4 @@
-import { toPairs, isEmpty, flow, join, map } from 'lodash/fp';
+import { toPairs, isEmpty, flow, join, map, values } from 'lodash/fp';
 import { IFilters } from './types';
 import {
   DISCHARGES_MAX,
@@ -6,6 +6,7 @@ import {
   AVARAGE_MEDICARE_CHARGES_MAX,
   RESULTS_PER_PAGE
 } from './consts';
+import { getKeysWithTruthyValues } from './helpers';
 
 type IQueryParams =
   | 'max_average_covered_charges'
@@ -58,7 +59,28 @@ const buildQueryParametersFromFilters = (filters: IFilters) => {
   const queryParamsPairs = toPairs(parameters);
   // join params with "=" and "&" (name=john&age=22)
   const joinedParams = flow([map(join('=')), join('&')])(queryParamsPairs);
-  return `?${joinedParams}`;
+  const searchQueryString = `?${joinedParams}`;
+  return appendFieldSelection(searchQueryString, filters.fieldsSelection);
+};
+
+const appendFieldSelection = (
+  currentQPString: string,
+  selectedFields: IFilters['fieldsSelection']
+) => {
+  const truthyFields = getKeysWithTruthyValues(selectedFields);
+
+  // if all selected don't append anything
+  if (truthyFields.length === values(selectedFields).length) {
+    return currentQPString;
+  }
+
+  const fieldPQString = flow([map(field => `field[]=${field}`), join('&')])(
+    truthyFields
+  );
+
+  return !!currentQPString
+    ? `${currentQPString}&${fieldPQString}`
+    : `?${currentQPString}`;
 };
 
 export default buildQueryParametersFromFilters;

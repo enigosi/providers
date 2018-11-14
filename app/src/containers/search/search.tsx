@@ -21,6 +21,7 @@ export interface IProps
     | 'avarageCoveredChargesFilter'
     | 'avarageMedicareChargesFilter'
     | 'stateFilter'
+    | 'fieldsSelection'
   > {
   providersFetch: PromiseState<IProvider[]>;
   handleUpdateRangeFilter: (
@@ -30,6 +31,7 @@ export interface IProps
   handleUpdateStateFilter: (value: string) => void;
   handleChangePage: (page: number) => void;
   currentPage: number;
+  handleFieldsSelectionUpdate: (trueValues: string[]) => void;
 }
 
 class Search extends React.Component<IProps> {
@@ -43,7 +45,9 @@ class Search extends React.Component<IProps> {
       avarageMedicareChargesFilter,
       stateFilter,
       handleChangePage,
-      currentPage
+      currentPage,
+      fieldsSelection,
+      handleFieldsSelectionUpdate
     } = this.props;
 
     // get total number of items for current query
@@ -61,6 +65,8 @@ class Search extends React.Component<IProps> {
               avarageMedicareChargesFilter={avarageMedicareChargesFilter}
               avarageCoveredChargesFilter={avarageCoveredChargesFilter}
               dischargesFilter={dischargesFilter}
+              fieldsSelection={fieldsSelection}
+              handleFieldsSelectionUpdate={handleFieldsSelectionUpdate}
             />
           </Col>
           <Col sm={16} lg={18} x-lg={19} style={{ padding: 15 }}>
@@ -81,6 +87,7 @@ class Search extends React.Component<IProps> {
                   providers={providersFetch.value}
                   totalItms={totalItms ? parseInt(totalItms, 10) : undefined}
                   handleChangePage={handleChangePage}
+                  fieldsSelection={fieldsSelection}
                 />
               )}
             </Layout.Content>

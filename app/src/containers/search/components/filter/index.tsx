@@ -1,12 +1,15 @@
 import * as React from 'react';
-import { Slider, Row, Input } from 'antd';
+import { flow, toPairs, map } from 'lodash/fp';
+import { Slider, Row, Input, Checkbox } from 'antd';
 import { IFilters, IRangeFilterValue } from '../../types';
 import {
   DISCHARGES_MAX,
   AVARAGE_COVERED_CHARGES_MAX,
-  AVARAGE_MEDICARE_CHARGES_MAX
+  AVARAGE_MEDICARE_CHARGES_MAX,
+  FIELD_QUERY_PARAM_LABELS
 } from '../../consts';
 import { IProps as SearchContainerProps } from '../../search';
+import { getKeysWithTruthyValues } from '../../helpers';
 
 interface IProps
   extends Pick<
@@ -15,15 +18,23 @@ interface IProps
       | 'avarageCoveredChargesFilter'
       | 'avarageMedicareChargesFilter'
       | 'stateFilter'
+      | 'fieldsSelection'
     >,
     Pick<
       SearchContainerProps,
-      'handleUpdateRangeFilter' | 'handleUpdateStateFilter'
+      | 'handleUpdateRangeFilter'
+      | 'handleUpdateStateFilter'
+      | 'handleFieldsSelectionUpdate'
     > {}
 
 export default class IntegerStep extends React.Component<IProps> {
   render() {
-    const { handleUpdateRangeFilter, handleUpdateStateFilter } = this.props;
+    const {
+      handleUpdateRangeFilter,
+      handleUpdateStateFilter,
+      fieldsSelection,
+      handleFieldsSelectionUpdate
+    } = this.props;
     return (
       <Row>
         <h3>Filter:</h3>
@@ -67,7 +78,22 @@ export default class IntegerStep extends React.Component<IProps> {
           min={1}
           max={AVARAGE_MEDICARE_CHARGES_MAX}
         />
+        <div className="spacer" />
+        <h4>Select display columns:</h4>
+        <Checkbox.Group
+          options={fieldsToCheckboxGroupOptions(FIELD_QUERY_PARAM_LABELS)}
+          value={getKeysWithTruthyValues(fieldsSelection)}
+          onChange={handleFieldsSelectionUpdate}
+        />
       </Row>
     );
   }
 }
+
+const fieldsToCheckboxGroupOptions = flow([
+  toPairs,
+  map(pair => ({
+    label: pair[1],
+    value: pair[0]
+  }))
+]);

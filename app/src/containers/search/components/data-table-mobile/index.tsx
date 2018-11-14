@@ -1,22 +1,23 @@
 import * as React from 'react';
 import { IProvider } from '../../types';
-import { COLUMNS } from '../../consts';
 import './data-table-mobile.css';
+import { COLUMNS } from '../../consts';
 
 interface IProps {
   providers: IProvider[];
+  columns: typeof COLUMNS;
 }
 
 export default class DataTableMobile extends React.Component<IProps> {
   render() {
-    const { providers } = this.props;
+    const { providers, columns } = this.props;
 
     return (
       <div>
         {providers.map(provider => (
           <table className="provider-data" key={provider.Id}>
             <tbody>
-              {COLUMNS.map(column => (
+              {columns.map(column => (
                 <tr
                   className="provider-data__row"
                   key={column.dataIndex as string}

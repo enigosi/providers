@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Table, Pagination } from 'antd';
 import { debounce } from 'lodash/fp';
-import { IProvider } from '../../types';
+import { IProvider, IFilters } from '../../types';
 import DataTableMobile from '../data-table-mobile';
-import { COLUMNS, RESULTS_PER_PAGE } from '../../consts';
+import { RESULTS_PER_PAGE } from '../../consts';
+import { getFilteredColumns } from '../../helpers';
 
 const LARGE_ENOUGH_FOR_TABLE_SCREEN_SIZE = 1400;
 
@@ -12,6 +13,7 @@ interface IProps {
   totalItms?: number;
   handleChangePage: (page: number) => void;
   currentPage: number;
+  fieldsSelection: IFilters['fieldsSelection'];
 }
 interface IState {
   isLargeEnoughForTable: boolean;
@@ -39,7 +41,13 @@ export default class DataTable extends React.Component<IProps> {
   }
 
   render() {
-    const { providers, totalItms, handleChangePage, currentPage } = this.props;
+    const {
+      providers,
+      totalItms,
+      handleChangePage,
+      currentPage,
+      fieldsSelection
+    } = this.props;
     const { isLargeEnoughForTable } = this.state;
     return (
       <div>
@@ -47,12 +55,15 @@ export default class DataTable extends React.Component<IProps> {
           <Table
             size="small"
             dataSource={providers}
-            columns={COLUMNS}
+            columns={getFilteredColumns(fieldsSelection)}
             rowKey="Id"
             pagination={false}
           />
         ) : (
-          <DataTableMobile providers={providers} />
+          <DataTableMobile
+            providers={providers}
+            columns={getFilteredColumns(fieldsSelection)}
+          />
         )}
         <Pagination
           current={currentPage}

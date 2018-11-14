@@ -1,13 +1,15 @@
 import * as React from 'react';
-import { debounce } from 'lodash/fp';
+import { debounce, mapValues } from 'lodash/fp';
 import Search from './search';
 import { IFilters, IProvider, IRangeFilterValue, IRangeFilters } from './types';
 import {
   DISCHARGES_MAX,
   AVARAGE_COVERED_CHARGES_MAX,
-  AVARAGE_MEDICARE_CHARGES_MAX
+  AVARAGE_MEDICARE_CHARGES_MAX,
+  FIELD_QUERY_PARAM_LABELS
 } from './consts';
 import './style.css';
+import { stringsToHashMap } from './helpers';
 
 interface IState
   extends Pick<
@@ -16,6 +18,7 @@ interface IState
     | 'avarageCoveredChargesFilter'
     | 'avarageMedicareChargesFilter'
     | 'stateFilter'
+    | 'fieldsSelection'
   > {
   providers: IProvider[];
   errorStatus?: string;
@@ -29,7 +32,9 @@ export default class SearchContainer extends React.Component<{}, IState> {
     avarageCoveredChargesFilter: [1, AVARAGE_COVERED_CHARGES_MAX],
     avarageMedicareChargesFilter: [1, AVARAGE_MEDICARE_CHARGES_MAX],
     stateFilter: '',
-    currentPage: 1
+    currentPage: 1,
+    // initiate with all values set to true
+    fieldsSelection: mapValues(() => true, FIELD_QUERY_PARAM_LABELS)
   };
 
   /**
@@ -70,13 +75,27 @@ export default class SearchContainer extends React.Component<{}, IState> {
       currentPage: page
     });
 
+  /**
+   * Handler update coming from Ant Design Checkbox.Grupe
+   */
+  handleFieldsSelectionUpdate = (trueValues: string[]) =>
+    this.setState({
+      fieldsSelection: {
+        // set all fields to false
+        ...mapValues(() => false, FIELD_QUERY_PARAM_LABELS),
+        // replace selected ones with truth,
+        ...stringsToHashMap(trueValues, true)
+      }
+    });
+
   public render() {
     const {
       dischargesFilter,
       avarageCoveredChargesFilter,
       avarageMedicareChargesFilter,
       stateFilter,
-      currentPage
+      currentPage,
+      fieldsSelection
     } = this.state;
 
     return (
@@ -89,6 +108,8 @@ export default class SearchContainer extends React.Component<{}, IState> {
         handleUpdateStateFilter={this.handleUpdateStateFilter}
         handleChangePage={this.handleChangePage}
         currentPage={currentPage}
+        fieldsSelection={fieldsSelection}
+        handleFieldsSelectionUpdate={this.handleFieldsSelectionUpdate}
       />
     );
   }
