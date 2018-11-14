@@ -16,12 +16,12 @@ interface IProps {
   fieldsSelection: IFilters['fieldsSelection'];
 }
 interface IState {
-  isLargeEnoughForTable: boolean;
+  isLargeEnoughForTable?: boolean;
 }
 
 export default class DataTable extends React.Component<IProps> {
   state: IState = {
-    isLargeEnoughForTable: false
+    isLargeEnoughForTable: undefined
   };
 
   debouncedHandleWindowResize = debounce(200, () =>
@@ -49,6 +49,7 @@ export default class DataTable extends React.Component<IProps> {
       fieldsSelection
     } = this.props;
     const { isLargeEnoughForTable } = this.state;
+    if (isLargeEnoughForTable === undefined) return null;
     return (
       <div>
         {isLargeEnoughForTable ? (
